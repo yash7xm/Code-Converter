@@ -29,6 +29,8 @@ button.addEventListener('click', () => {
     }else {
         givenCode.value = 'Please wait for a minute for further request';
         console.log('wait a minute buddy');
+        converted = true;
+        showBlurText();
     }
 })
 
