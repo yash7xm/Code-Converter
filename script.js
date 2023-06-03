@@ -4,6 +4,7 @@ const button = document.getElementById('convert-btn');
 const res = document.getElementById('result');
 let langToBeConverted = dropDown.value;
 let converted = false;
+let conversionAllowed = true;
 
 var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*()-=+[]{}|;:',.<>/?~`\"\\";
 
@@ -19,6 +20,39 @@ button.addEventListener('click', () => {
         return;
     }
     showBlurText();
+    if(conversionAllowed){
+        fetchData();
+        conversionAllowed = false;
+        setTimeout(() => {
+            conversionAllowed = true;
+        },60000)
+    }else {
+        givenCode.value = 'Please wait for a minute for further request';
+        console.log('wait a minute buddy');
+    }
+})
+
+let intervalId = null;
+
+function showBlurText() {
+  if (converted) {
+    res.textContent = '';
+    converted = false;
+    res.style.filter = 'blur(0px)';
+    clearInterval(intervalId);
+    return;
+  }
+
+  intervalId = setInterval(() => {
+    res.textContent = givenCode.value.split('')
+      .map(letter => letters[Math.floor(Math.random() * 94)])
+      .join("");
+    res.style.filter = 'blur(2px)';
+  }, 100);
+}
+
+
+function fetchData(){
     fetch('https://code-converter-us52.onrender.com/', {
         method: 'POST',
         headers: {
@@ -40,23 +74,4 @@ button.addEventListener('click', () => {
         showBlurText();
         res.textContent = `Some error has Occured on the server side please try again after sometime`
     })
-})
-
-let intervalId = null;
-
-function showBlurText() {
-  if (converted) {
-    res.textContent = '';
-    converted = false;
-    res.style.filter = 'blur(0px)';
-    clearInterval(intervalId);
-    return;
-  }
-
-  intervalId = setInterval(() => {
-    res.textContent = givenCode.value.split('')
-      .map(letter => letters[Math.floor(Math.random() * 94)])
-      .join("");
-    res.style.filter = 'blur(2px)';
-  }, 100);
 }
