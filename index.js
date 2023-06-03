@@ -28,7 +28,7 @@ app.get("*", (req,res) => {
 })
 
 
-app.post('/convert', async (req,res) => {
+app.post('/', async (req,res) => {
 
     const { lang,message } = req.body;
 
